@@ -107,6 +107,9 @@ function layBrick () {
         BY += 10
     }
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Wall, function (sprite, otherSprite) {
+    projectile.setVelocity(Math.randomRange(-45, 45), Math.randomRange(-45, 45))
+})
 scene.onOverlapTile(SpriteKind.Projectile, myTiles.tile3, function (sprite, location) {
     info.changeLifeBy(-1)
 })
@@ -114,13 +117,14 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.death, function (sprite, oth
     projectile.destroy(effects.spray, 500)
     info.changeLifeBy(-1)
     if (info.life() > 0) {
-        projectile = sprites.create(img`
+        projectile = sprites.createProjectileFromSprite(img`
 2 2 2 2 
 2 2 2 2 
 2 2 2 2 
 2 2 2 2 
-`, SpriteKind.Player)
+`, mySprite, 50, 100)
     }
+    scene.cameraShake(4, 500)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
     projectile.setVelocity(Math.randomRange(-45, 45), -50)
@@ -129,6 +133,7 @@ let BY = 0
 let BX = 0
 let Brick: Sprite = null
 let projectile: Sprite = null
+let mySprite: Sprite = null
 layBrick()
 tiles.setTilemap(tiles.createTilemap(
             hex`0a0008000101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101`,
@@ -145,7 +150,7 @@ tiles.setTilemap(tiles.createTilemap(
             [myTiles.tile0,myTiles.tile1,myTiles.tile2,myTiles.tile3],
             TileScale.Sixteen
         ))
-let mySprite = sprites.create(img`
+mySprite = sprites.create(img`
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . 
@@ -172,10 +177,375 @@ projectile = sprites.createProjectileFromSprite(img`
 2 2 2 2 
 2 2 2 2 
 `, mySprite, 0, -100)
-projectile.setFlag(SpriteFlag.StayInScreen, false)
 info.setLife(3)
 let border = sprites.create(img`
 b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b 
 b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b 
 `, SpriteKind.death)
 border.setPosition(80, 120)
+let wall_right = sprites.create(img`
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+`, SpriteKind.Wall)
+wall_right.setPosition(160, 55)
+let wall_left = sprites.create(img`
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+`, SpriteKind.Wall)
+wall_left.setPosition(0, 55)
