@@ -113,6 +113,14 @@ scene.onOverlapTile(SpriteKind.Projectile, myTiles.tile3, function (sprite, loca
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.death, function (sprite, otherSprite) {
     projectile.destroy(effects.spray, 500)
     info.changeLifeBy(-1)
+    if (info.life() > 0) {
+        projectile = sprites.create(img`
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+`, SpriteKind.Player)
+    }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
     projectile.setVelocity(Math.randomRange(-45, 45), -50)
@@ -159,22 +167,10 @@ mySprite.setPosition(80, 110)
 controller.moveSprite(mySprite, 100, 0)
 mySprite.setFlag(SpriteFlag.StayInScreen, true)
 projectile = sprites.createProjectileFromSprite(img`
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . 2 2 2 2 2 . . . . . . 
-. . . . . 2 2 2 2 2 . . . . . . 
-. . . . . 2 2 2 2 2 . . . . . . 
-. . . . . 2 2 2 2 2 . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
 `, mySprite, 0, -100)
 projectile.setFlag(SpriteFlag.StayInScreen, false)
 info.setLife(3)
