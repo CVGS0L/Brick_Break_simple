@@ -2,6 +2,8 @@ namespace SpriteKind {
     export const Wall = SpriteKind.create()
     export const brick = SpriteKind.create()
     export const death = SpriteKind.create()
+    export const Rwall = SpriteKind.create()
+    export const Lwall = SpriteKind.create()
 }
 namespace myTiles {
     //% blockIdentity=images._tile
@@ -81,6 +83,9 @@ f f f f f f f f f f f f f f f f
 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 
 `
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Lwall, function (sprite, otherSprite) {
+    projectile.setVelocity(Math.randomRange(0, 90), Math.randomRange(-90, 90))
+})
 function brick2 (x: number, y: number) {
     Brick = sprites.create(img`
 f f f f f f f f f f f f 
@@ -92,6 +97,9 @@ f f f f f f f f f f f f
 `, SpriteKind.brick)
     Brick.setPosition(BX, BY)
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Rwall, function (sprite, otherSprite) {
+    projectile.setVelocity(Math.randomRange(-90, 0), Math.randomRange(-90, 90))
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.brick, function (sprite, otherSprite) {
     projectile.setVelocity(Math.randomRange(-45, 45), 50)
     otherSprite.destroy(effects.disintegrate, 100)
@@ -107,9 +115,6 @@ function layBrick () {
         BY += 10
     }
 }
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Wall, function (sprite, otherSprite) {
-    projectile.setVelocity(Math.randomRange(-45, 45), Math.randomRange(-45, 45))
-})
 scene.onOverlapTile(SpriteKind.Projectile, myTiles.tile3, function (sprite, location) {
     info.changeLifeBy(-1)
 })
@@ -364,7 +369,7 @@ let wall_right = sprites.create(img`
 2 2 2 2 
 2 2 2 2 
 2 2 2 2 
-`, SpriteKind.Wall)
+`, SpriteKind.Rwall)
 wall_right.setPosition(160, 55)
 let wall_left = sprites.create(img`
 2 2 2 2 
@@ -547,5 +552,5 @@ let wall_left = sprites.create(img`
 2 2 2 2 
 2 2 2 2 
 2 2 2 2 
-`, SpriteKind.Wall)
+`, SpriteKind.Lwall)
 wall_left.setPosition(0, 55)
