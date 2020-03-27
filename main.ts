@@ -4,6 +4,7 @@ namespace SpriteKind {
     export const death = SpriteKind.create()
     export const Rwall = SpriteKind.create()
     export const Lwall = SpriteKind.create()
+    export const top = SpriteKind.create()
 }
 namespace myTiles {
     //% blockIdentity=images._tile
@@ -86,30 +87,21 @@ f f f f f f f f f f f f f f f f
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Lwall, function (sprite, otherSprite) {
     projectile.setVelocity(Math.randomRange(0, 90), Math.randomRange(-90, 90))
 })
-function brick2 (x: number, y: number) {
-    Brick = sprites.create(img`
-f f f f f f f f f f f f 
-f 7 7 7 7 7 7 7 7 7 7 f 
-f 7 7 7 7 7 7 7 7 7 7 f 
-f 7 7 7 7 7 7 7 7 7 7 f 
-f 7 7 7 7 7 7 7 7 7 7 f 
-f f f f f f f f f f f f 
-`, SpriteKind.brick)
-    Brick.setPosition(BX, BY)
-}
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Rwall, function (sprite, otherSprite) {
     projectile.setVelocity(Math.randomRange(-90, 0), Math.randomRange(-90, 90))
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.brick, function (sprite, otherSprite) {
+    info.changeScoreBy(1)
     projectile.setVelocity(Math.randomRange(-45, 45), 50)
     otherSprite.destroy(effects.disintegrate, 100)
+    music.playTone(165, music.beat(BeatFraction.Half))
 })
 function layBrick () {
     BY = 20
     for (let index = 0; index < 3; index++) {
         for (let index = 0; index < 12; index++) {
             BX += 12
-            brick2(BX, BY)
+            createBrick(BX, BY)
         }
         BX = 0
         BY += 10
@@ -131,14 +123,29 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.death, function (sprite, oth
     }
     scene.cameraShake(4, 500)
 })
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.top, function (sprite, otherSprite) {
+    projectile.setVelocity(Math.randomRange(-180, 180), Math.randomRange(0, 90))
+})
+function createBrick (x: number, y: number) {
+    Brick = sprites.create(img`
+f f f f f f f f f f f f 
+f 7 7 7 7 7 7 7 7 7 7 f 
+f 7 7 7 7 7 7 7 7 7 7 f 
+f 7 7 7 7 7 7 7 7 7 7 f 
+f 7 7 7 7 7 7 7 7 7 7 f 
+f f f f f f f f f f f f 
+`, SpriteKind.brick)
+    Brick.setPosition(BX, BY)
+}
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
     projectile.setVelocity(Math.randomRange(-45, 45), -50)
 })
-let BY = 0
-let BX = 0
 let Brick: Sprite = null
+let BX = 0
+let BY = 0
 let projectile: Sprite = null
 let mySprite: Sprite = null
+info.setScore(0)
 layBrick()
 tiles.setTilemap(tiles.createTilemap(
             hex`0a0008000101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101`,
@@ -554,3 +561,16 @@ let wall_left = sprites.create(img`
 2 2 2 2 
 `, SpriteKind.Lwall)
 wall_left.setPosition(0, 55)
+let roof = sprites.create(img`
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+`, SpriteKind.top)
+roof.setPosition(80, 1)
+forever(function () {
+    if (info.score() >= 36) {
+        info.setScore(game.runtime() / 1000)
+        game.over(true)
+    }
+})
