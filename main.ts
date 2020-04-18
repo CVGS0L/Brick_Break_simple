@@ -5,6 +5,7 @@ namespace SpriteKind {
     export const Rwall = SpriteKind.create()
     export const Lwall = SpriteKind.create()
     export const top = SpriteKind.create()
+    export const pup = SpriteKind.create()
 }
 namespace myTiles {
     //% blockIdentity=images._tile
@@ -95,6 +96,21 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.brick, function (sprite, oth
     projectile.setVelocity(Math.randomRange(-45, 45), 50)
     otherSprite.destroy(effects.disintegrate, 100)
     music.playTone(165, music.beat(BeatFraction.Half))
+    if (info.score() == 10) {
+        info.changeLifeBy(1)
+        mySprite.say("+1 life", 100)
+        pause(100)
+    }
+    if (info.score() == 20) {
+        info.changeLifeBy(1)
+        mySprite.say("+1 life", 100)
+        pause(100)
+    }
+    if (info.score() == 10) {
+        info.changeLifeBy(1)
+        mySprite.say("+1 life", 100)
+        pause(100)
+    }
 })
 function layBrick () {
     BY = 20
@@ -123,6 +139,14 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.death, function (sprite, oth
     }
     scene.cameraShake(4, 500)
 })
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.pup, function (sprite, otherSprite) {
+    p2 = sprites.createProjectileFromSprite(img`
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+2 2 2 2 
+`, mySprite, 0, -100)
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.top, function (sprite, otherSprite) {
     projectile.setVelocity(Math.randomRange(-180, 180), Math.randomRange(0, 90))
 })
@@ -141,10 +165,18 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, ot
     projectile.setVelocity(Math.randomRange(-45, 45), -50)
 })
 let Brick: Sprite = null
+let p2: Sprite = null
 let BX = 0
 let BY = 0
 let projectile: Sprite = null
 let mySprite: Sprite = null
+let pup = sprites.create(img`
+5 5 5 5 5 5 5 5 
+5 5 5 5 5 5 5 5 
+5 5 5 5 5 5 5 5 
+5 5 5 5 5 5 5 5 
+`, SpriteKind.pup)
+pup.setPosition(80, 10)
 info.setScore(0)
 layBrick()
 tiles.setTilemap(tiles.createTilemap(
@@ -183,13 +215,13 @@ mySprite = sprites.create(img`
 mySprite.setPosition(80, 110)
 controller.moveSprite(mySprite, 100, 0)
 mySprite.setFlag(SpriteFlag.StayInScreen, true)
+info.setLife(3)
 projectile = sprites.createProjectileFromSprite(img`
 2 2 2 2 
 2 2 2 2 
 2 2 2 2 
 2 2 2 2 
 `, mySprite, 0, -100)
-info.setLife(3)
 let border = sprites.create(img`
 b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b 
 b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b 
@@ -568,6 +600,10 @@ let roof = sprites.create(img`
 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
 `, SpriteKind.top)
 roof.setPosition(80, 1)
+projectile.setFlag(SpriteFlag.StayInScreen, true)
+forever(function () {
+	
+})
 forever(function () {
     if (info.score() >= 36) {
         info.setScore(game.runtime() / 1000)

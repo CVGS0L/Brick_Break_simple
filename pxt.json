@@ -1,5 +1,5 @@
 {
-    "name": "Gaming",
+    "name": "Brick Breaker, but with random ball velocity",
     "dependencies": {
         "device": "*"
     },
